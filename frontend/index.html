@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Query Interface</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #042D29;
+            color: #495057;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        
+
+        p {
+            color: #6c757d;
+            font-size: 1.1em;
+        }h1 {
+        font-family: 'Abril Fatface', serif;
+        font-size: 2.5em;
+        color: #B78C56;
+        text-align: center;
+        margin-bottom: 20px;
+        animation: fadeIn 2s ease-out;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+        h4{
+        font-family: 'Poppins', sans-serif; /* Modern sans-serif font */
+        font-size: 1.2em;
+        color: #D4B899; /* Lighter complementary shade */
+        text-align: center;
+        margin-top: 10px;
+        font-weight: 400; /* Slightly lighter weight */
+        letter-spacing: 1px;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+            transition: border 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+    button {
+    background-color: #4CAF50; /* A pleasing green */
+    color: #FFFFFF; /* Text color: white for contrast */
+    padding: 12px 24px; /* Adjust padding for better proportions */
+    font-size: 18px; /* Slightly larger font for visibility */
+    font-family: 'Poppins', sans-serif; /* Clean and modern font */
+    font-weight: 500; /* Medium weight for a sleek look */
+    border: none; /* No border for a clean design */
+    border-radius: 12px; /* Smooth rounded corners */
+    cursor: pointer; /* Pointer cursor for interaction */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    margin-bottom: 30px;
+}
+
+button:hover {
+    background-color: #45C163; /* Slightly brighter green on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    transform: translateY(-2px); /* Adds a hover "lift" effect */
+}
+
+
+.response {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #1e1e1e; /* Dark background for better contrast */
+    border-radius: 15px; /* Rounded corners for smooth design */
+    border: 1px solid #B78C56; /* Border color to match primary accent */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Soft, modern shadow */
+    width: 100%;
+    max-width: 650px;
+    display: block;
+    overflow: auto;
+    animation: fadeIn 1.5s forwards;
+    font-family: 'Roboto', sans-serif; /* Clean, modern font */
+}
+
+.loading {
+    font-style: italic;
+    color: #888888; /* Slightly lighter text color */
+    animation: fadeIn 1s ease-out;
+    font-size: 1.1em;
+}
+
+.response h3 {
+    margin-top: 0;
+    font-size: 1.4em;
+    color: #f1f1f1; /* Soft red/pink for headings */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.response p {
+    font-size: 1.1em;
+    color: #eeeeee; /* Light text for readability */
+    margin: 10px 0;
+    max-height: 180px; /* Adjusted for better overflow control */
+    overflow-y: auto;
+    padding: 15px; /* Slightly more padding for a spacious feel */
+    border: 1px solid #555; /* Darker border for contrast */
+    border-radius: 8px; /* Smoother rounded edges */
+    background-color: #333333; /* Darker background for readability */
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+}
+
+.accuracy {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #28a745; /* Green for success */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes changeBgColor {
+    0% { background-color: #f1f1f1; }
+    100% { background-color: #144d97; }
+}
+
+button:hover {
+    background-color: #5aaf60; /* Brighter green on hover */
+    transform: scale(1.05); /* Slightly increase button size */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Hover shadow effect */
+}
+</style>
+</head>
+<body>
+
+    <h1>HARNESSING R-A-G IN HEART FAILURE RISK</h1>
+    <h4>A RAG BASED MODEL</h4>
+    <textarea id="queryInput" rows="4" placeholder="Ask Dinku and wait for eight minutes to see the magic...."></textarea>
+    <button id="submitButton">Submit Query</button>
+
+    <div class="response" id="responses">
+        <div class="loading" id="loadingMessage" style="display: none;">Processing your query...</div>
+        <h3>General Llama3.2 Response:</h3>
+        <p id="generalText">...</p>
+        <h3>RAG Response:</h3>
+        <p id="ragText">...</p>
+        <h3>Exact Chunk from Database:</h3>
+        <p id="chunkText">...</p>
+        <h3>Accuracy Score:</h3>
+        <p id="accuracyScore">...</p>
+    </div>
+
+    <script>
+        document.getElementById("submitButton").addEventListener("click", function () {
+            const queryText = document.getElementById("queryInput").value.trim();
+
+            if (!queryText) {
+                alert("Please enter a query before submitting.");
+                return;
+            }
+
+            document.getElementById("responses").style.display = "block";
+            document.getElementById("loadingMessage").style.display = "block";
+            document.getElementById("generalText").textContent = "...";
+            document.getElementById("ragText").textContent = "...";
+            document.getElementById("chunkText").textContent = "...";
+            document.getElementById("accuracyScore").textContent = "...";
+
+            fetch("http://127.0.0.1:5000/query", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ query_text: queryText }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch the data. Ensure your local backend is running.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("loadingMessage").style.display = "none";
+                    document.getElementById("generalText").textContent = data.general_response || "No response.";
+                    document.getElementById("ragText").textContent = data.rag_response || "No response.";
+                    document.getElementById("chunkText").textContent = data.exact_chunk || "No chunk found.";
+                    document.getElementById("accuracyScore").textContent = data.accuracy_score 
+                        ? `${(Math.abs(data.accuracy_score) * 100).toFixed(2)}%` 
+                        : "No accuracy score available.";
+
+                    document.body.style.animation = "changeBgColor 1.5s ease-out";
+                })
+                .catch(error => {
+                    document.getElementById("loadingMessage").style.display = "none";
+                    alert("An error occurred: " + error.message);
+                });
+        });
+    </script>
+</body>
+</html>
